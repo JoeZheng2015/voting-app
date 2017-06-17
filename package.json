@@ -1,0 +1,22 @@
+{
+  "name": "voting-app",
+  "version": "1.0.0",
+  "description": "fullstack voting app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js",
+    "mongo": "mongod --dbpath=./data"
+  },
+  "keywords": [
+    "fullstack"
+  ],
+  "author": "joezheng",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongodb": "^2.2.28",
+    "pug": "^2.0.0-rc.2"
+  }
+}
