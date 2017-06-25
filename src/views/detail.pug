@@ -3,11 +3,15 @@ html(lang="zh-cn")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        link(rel="stylesheet", href="/public/style.css")
         title 投票详情页
     body
-        h3 #{title}
-        p #{agree}人同意
-        p #{object}人反对
-        div
-            button 同意
-            button 反对
+        section.Detail
+            h3 #{title}
+            div.Detail__Content
+                p #{agree}人同意
+                p #{object}人反对
+                div.btnBox
+                    button.Detail__btn(data-type="agree") 同意
+                    button.Detail__btn(data-type="object") 反对
+    script(src="/public/detail.js")

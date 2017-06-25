@@ -3,8 +3,10 @@ html(lang="zh-cn")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        link(rel="stylesheet", href="/public/style.css")
         title 新建投票项目页
     body
-        input.input(placeholder="标题")
-        button.btn 确定
+        section.Admin
+            input.Admin__input(placeholder="请输入项目标题")
+            button.btn 确定
     script(src="/public/admin.js")

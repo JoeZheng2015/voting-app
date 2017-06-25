@@ -1,18 +1,17 @@
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
-const mongo = require('mongodb').MongoClient
+const { MongoClient: mongo, ObjectId } = require('mongodb')
 
 const app = express()
 const port = 8080
 
 
-mongo.connect('mongodb://localhost:27017/learnyoumongo', (err, db) => {
+mongo.connect('mongodb://localhost:27017/voting-app', (err, db) => {
     if (err) throw err
     const collection = db.collection('votes')
 
     app.use(bodyParser.json()); // for parsing application/json
-    app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
     app.use('/public', express.static(`${__dirname}/public`))
     app.set('views', path.resolve(__dirname, './views'))
     app.set('view engine', 'pug')
@@ -25,17 +24,26 @@ mongo.connect('mongodb://localhost:27017/learnyoumongo', (err, db) => {
     }
 
     app.get('/', (req, res) => {
-        res.render('index', {
-            votes: [
-                vote,
-            ]
-        })
+        collection.find({})
+            .toArray((err, votes) => {
+                if (err) throw err
+
+                res.render('index', {
+                    votes,
+                })
+            })
     })
 
     app.get('/detail/:_id', (req, res) => {
         const { _id } = req.params
 
-        res.render('detail', vote)
+        collection.findOne(ObjectId(_id))
+            .then(document => {
+                res.render('detail', document)
+            })
+            .catch(err => {
+                res.send(err)
+            })
     })
 
     app.get('/admin', (req, res) => {
@@ -43,9 +51,42 @@ mongo.connect('mongodb://localhost:27017/learnyoumongo', (err, db) => {
     })
 
     app.post('/vote/add', (req, res) => {
-        res.send({
-            ret: 0,
+        const { title } = req.body
+        const document = {
+            title,
+            agree: 0,
+            object: 0,
+        }
+
+        collection.insertOne(document)
+            .then(result => {
+                const ret = result.result.ok === 1 ? 0 : 1
+
+                res.send({
+                    ret,
+                    message: ret === 1 ? result.message : '',
+                })
+            })
+    })
+
+    app.post('/vote/:_id', (req, res) => {
+        const { _id } = req.params
+        const { type } = req.body
+
+        collection.findOneAndUpdate({
+            _id: ObjectId(_id),
+        }, {
+            $inc: {
+                [type]: 1,
+            }
         })
+            .then(result => {
+                const ret = result.ok === 1 ? 0 : 1
+                res.send({
+                    ret,
+                    message: ret === 1 ? '数据库错误' : '',
+                })
+            })
     })
 
     app.listen(port, () => {

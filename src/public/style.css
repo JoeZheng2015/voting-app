@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.Votes {
+    padding: 20px;
+}
+.Votes__list {
+    list-style-type: none;
+}
+
+.Detail {
+    padding: 20px;
+}
+.Detail__Content {
+    padding-left: 10px;
+}
+.Detail__btn {
+    margin-right: 10px;
+}
+
+.Admin {
+    padding: 20px;
+}
+.Admin__input {
+    margin-right: 10px;
+}
+
